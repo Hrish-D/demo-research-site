@@ -34,6 +34,8 @@ const config: Config = {
         'float': 'float 6s ease-in-out infinite',
         'glow': 'glow 4s ease-in-out infinite alternate',
         'nucleus-pulse': 'nucleusPulse 3s ease-in-out infinite',
+        'shimmer': 'shimmer 1.5s ease-in-out',
+        'drift': 'drift 30s ease-in-out infinite',
       },
       keyframes: {
         fadeUp: {
@@ -59,6 +61,16 @@ const config: Config = {
         nucleusPulse: {
           '0%, 100%': { filter: 'drop-shadow(0 0 20px rgba(249, 115, 22, 0.3))' },
           '50%': { filter: 'drop-shadow(0 0 40px rgba(249, 115, 22, 0.5))' },
+        },
+        shimmer: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
+        drift: {
+          '0%, 100%': { transform: 'translate(0, 0)' },
+          '25%': { transform: 'translate(30px, -20px)' },
+          '50%': { transform: 'translate(-20px, 15px)' },
+          '75%': { transform: 'translate(15px, 25px)' },
         },
       },
       backgroundImage: {

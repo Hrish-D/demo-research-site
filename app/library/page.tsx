@@ -1,13 +1,31 @@
 'use client';
 
-import { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import HeroSection from '@/components/HeroSection';
+import { useState, useMemo, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'framer-motion';
+import Image from 'next/image';
+import Link from 'next/link';
+import CosmicNav from '@/components/cosmic/CosmicNav';
 import SearchBar from '@/components/SearchBar';
 import FilterBar from '@/components/FilterBar';
 import PaperViewer from '@/components/PaperViewer';
 import { ResearchPaper } from '@/lib/types';
-import Link from 'next/link';
+
+function AnimatedSection({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-80px' });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 30 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 const MOCK_PAPERS: ResearchPaper[] = [
   {
@@ -72,6 +90,12 @@ export default function LibraryPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedPaper, setSelectedPaper] = useState<ResearchPaper | null>(null);
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ['start start', 'end start'],
+  });
+  const heroImageY = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
 
   const allTags = useMemo(() => {
     const tags = new Set<string>();
@@ -104,31 +128,71 @@ export default function LibraryPage() {
   }, [papers, searchQuery, selectedTags]);
 
   return (
-    <>
-      <HeroSection
-        title="Paper Library"
-        subtitle="Research Portal"
-        description="Browse, search, and download research papers from our laboratory collection."
-      />
+    <div className="min-h-screen bg-black text-white">
+      <CosmicNav />
 
-      <section className="section-padding">
-        <div className="max-w-6xl mx-auto px-5 sm:px-8">
-          <motion.div
+      {/* Hero Section */}
+      <section ref={heroRef} className="relative h-[60vh] min-h-[400px] overflow-hidden flex items-center justify-center">
+        <motion.div className="absolute inset-0" style={{ y: heroImageY }}>
+          <Image
+            src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=1920&q=85"
+            alt=""
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
+        </motion.div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black" />
+        <div className="relative z-10 text-center px-6">
+          <motion.p
+            className="text-teal-400/70 text-xs md:text-sm tracking-[0.4em] uppercase font-sans mb-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-12"
+            transition={{ delay: 0.2, duration: 0.8 }}
           >
+            Research Portal
+          </motion.p>
+          <motion.h1
+            className="text-5xl sm:text-6xl md:text-7xl font-serif tracking-tight text-white"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          >
+            Paper Library
+          </motion.h1>
+          <motion.p
+            className="mt-4 text-white/50 max-w-xl mx-auto text-lg"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+          >
+            Browse, search, and download research papers from our laboratory collection.
+          </motion.p>
+        </div>
+      </section>
+
+      {/* Content */}
+      <section className="py-20 px-5 sm:px-8">
+        <div className="max-w-6xl mx-auto">
+          <Link href="/" className="inline-block text-white/30 hover:text-white/60 text-sm transition-colors duration-300 mb-10">
+            &larr; Back to Home
+          </Link>
+
+          <AnimatedSection className="mb-12">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
               <div>
-                <h2 className="text-2xl font-serif font-semibold text-[var(--foreground)] mb-1">
+                <h2 className="text-2xl font-serif font-semibold text-white/90 mb-1">
                   Browse Papers
                 </h2>
-                <p className="text-sm text-[var(--muted-foreground)]">
+                <p className="text-sm text-white/30">
                   {papers.length} papers in the library
                 </p>
               </div>
-              <Link href="/dashboard" className="btn-primary">
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-teal-400/10 border border-teal-400/20 rounded-full text-teal-400 text-sm font-medium hover:bg-teal-400/20 transition-colors duration-300"
+              >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
@@ -136,14 +200,14 @@ export default function LibraryPage() {
               </Link>
             </div>
 
-            <div className="space-y-4">
+            <div className="bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm rounded-2xl p-6 space-y-4 hover:shadow-[0_0_30px_rgba(45,212,191,0.08)] transition-shadow duration-500">
               <SearchBar onSearch={setSearchQuery} placeholder="Search by title, authors, keywords..." />
               <FilterBar tags={allTags} selectedTags={selectedTags} onTagChange={setSelectedTags} label="Filter by topic" />
-              <p className="text-sm text-[var(--muted-foreground)]">
+              <p className="text-sm text-white/30">
                 Showing {filteredPapers.length} of {papers.length} papers
               </p>
             </div>
-          </motion.div>
+          </AnimatedSection>
 
           {filteredPapers.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -154,38 +218,40 @@ export default function LibraryPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-60px' }}
                   transition={{ duration: 0.5, delay: index * 0.05 }}
-                  className="card p-6 card-hover cursor-pointer group"
+                  className="bg-white/[0.03] border border-white/[0.06] backdrop-blur-sm rounded-2xl p-6 cursor-pointer group hover:bg-white/[0.05] hover:shadow-[0_0_30px_rgba(45,212,191,0.08)] transition-all duration-300"
                   onClick={() => setSelectedPaper(paper)}
                 >
                   <div className="flex items-center justify-between mb-4">
-                    <span className="tag font-semibold">{paper.year}</span>
-                    <span className="text-xs text-[var(--muted-foreground)]">
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-teal-400/10 text-teal-400 border border-teal-400/20">
+                      {paper.year}
+                    </span>
+                    <span className="text-xs text-white/30">
                       {new Date(paper.uploadedDate).toLocaleDateString()}
                     </span>
                   </div>
 
-                  <h3 className="text-base font-serif font-semibold text-[var(--foreground)] mb-3 line-clamp-2 group-hover:text-accent-600 dark:group-hover:text-accent-400 transition-colors">
+                  <h3 className="text-base font-serif font-semibold text-white/90 mb-3 line-clamp-2 group-hover:text-teal-400 transition-colors">
                     {paper.title}
                   </h3>
 
-                  <p className="text-sm text-[var(--muted-foreground)] mb-3">
+                  <p className="text-sm text-white/50 mb-3">
                     {paper.authors.join(', ')}
                   </p>
 
-                  <p className="text-sm text-[var(--muted-foreground)] line-clamp-2 mb-4 leading-relaxed">
+                  <p className="text-sm text-white/30 line-clamp-2 mb-4 leading-relaxed">
                     {paper.abstract}
                   </p>
 
                   <div className="flex flex-wrap gap-1.5 mb-4">
                     {paper.tags.map((tag) => (
-                      <span key={tag} className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium bg-[var(--muted)] text-[var(--muted-foreground)]">
+                      <span key={tag} className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium bg-white/[0.05] text-white/40 border border-white/[0.06]">
                         {tag}
                       </span>
                     ))}
                   </div>
 
-                  <div className="pt-4 border-t border-[var(--card-border)] flex items-center justify-end">
-                    <span className="text-sm font-medium text-accent-600 dark:text-accent-400 group-hover:translate-x-1 transition-transform duration-300">
+                  <div className="pt-4 border-t border-white/[0.06] flex items-center justify-end">
+                    <span className="text-sm font-medium text-teal-400 group-hover:translate-x-1 transition-transform duration-300">
                       View Paper &rarr;
                     </span>
                   </div>
@@ -194,10 +260,10 @@ export default function LibraryPage() {
             </div>
           ) : (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
-              <p className="text-[var(--muted-foreground)] text-lg mb-4">No papers found.</p>
+              <p className="text-white/50 text-lg mb-4">No papers found.</p>
               <button
                 onClick={() => { setSearchQuery(''); setSelectedTags([]); }}
-                className="text-accent-600 dark:text-accent-400 hover:underline font-medium"
+                className="text-teal-400 hover:underline font-medium"
               >
                 Clear filters
               </button>
@@ -213,7 +279,7 @@ export default function LibraryPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-auto"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-auto"
             onClick={() => setSelectedPaper(null)}
           >
             <motion.div
@@ -222,15 +288,15 @@ export default function LibraryPage() {
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.3 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-[var(--card)] border border-[var(--card-border)] rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-auto"
+              className="bg-black border border-white/[0.06] rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-auto"
             >
-              <div className="sticky top-0 bg-[var(--card)] border-b border-[var(--card-border)] p-6 flex items-center justify-between z-10">
-                <h2 className="text-lg font-serif font-semibold text-[var(--foreground)] flex-grow pr-4 line-clamp-1">
+              <div className="sticky top-0 bg-black/90 backdrop-blur-md border-b border-white/[0.06] p-6 flex items-center justify-between z-10">
+                <h2 className="text-lg font-serif font-semibold text-white/90 flex-grow pr-4 line-clamp-1">
                   {selectedPaper.title}
                 </h2>
                 <button
                   onClick={() => setSelectedPaper(null)}
-                  className="w-10 h-10 rounded-xl bg-[var(--muted)] flex items-center justify-center text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors shrink-0"
+                  className="w-10 h-10 rounded-xl bg-white/[0.05] border border-white/[0.06] flex items-center justify-center text-white/50 hover:text-white transition-colors shrink-0"
                   aria-label="Close"
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -245,6 +311,13 @@ export default function LibraryPage() {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+
+      {/* Footer */}
+      <footer className="border-t border-white/[0.04] py-12 bg-black">
+        <div className="max-w-7xl mx-auto px-6 md:px-10 text-center">
+          <p className="text-white/15 text-xs tracking-wider">&copy; 2026 Advanced Materials &amp; Systems Lab</p>
+        </div>
+      </footer>
+    </div>
   );
 }

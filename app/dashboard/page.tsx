@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import PaperUploadForm from '@/components/PaperUploadForm';
 import { ResearchPaper } from '@/lib/types';
 import Link from 'next/link';
+import CosmicNav from '@/components/cosmic/CosmicNav';
 
 export default function DashboardPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -59,7 +60,8 @@ export default function DashboardPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-5 pt-20">
+      <div className="min-h-screen bg-black flex items-center justify-center px-5 pt-20">
+        <CosmicNav />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -113,7 +115,8 @@ export default function DashboardPage() {
   const userEmail = (typeof window !== 'undefined' && localStorage.getItem('amslab_user_email')) || 'Researcher';
 
   return (
-    <div className="min-h-screen pt-20">
+    <div className="min-h-screen bg-black pt-20">
+      <CosmicNav />
       {/* Dashboard Header */}
       <div className="border-b border-[var(--card-border)] bg-[var(--card)]">
         <div className="container-width py-6">

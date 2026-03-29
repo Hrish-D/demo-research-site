@@ -100,54 +100,34 @@
 }
 
 /* ═══════════════════════════════════════════════════════════
-   Atomic Model Animations (CSS for performance)
+   Cosmic Orbital Animations (CSS for GPU compositing)
    ═══════════════════════════════════════════════════════════ */
 
-/* Electron orbital animation - uses CSS for GPU compositing */
-@keyframes electronOrbit {
+/* Celestial orbit — elliptical path using CSS */
+@keyframes celestialOrbit {
   0% {
-    transform: translate(var(--orbit-rx), 0);
+    transform: rotateZ(var(--orbit-tilt, 0deg)) translate(var(--orbit-rx), 0) rotateZ(calc(var(--orbit-tilt, 0deg) * -1));
   }
   25% {
-    transform: translate(0, var(--orbit-ry));
+    transform: rotateZ(var(--orbit-tilt, 0deg)) translate(0, var(--orbit-ry)) rotateZ(calc(var(--orbit-tilt, 0deg) * -1));
   }
   50% {
-    transform: translate(calc(var(--orbit-rx) * -1), 0);
+    transform: rotateZ(var(--orbit-tilt, 0deg)) translate(calc(var(--orbit-rx) * -1), 0) rotateZ(calc(var(--orbit-tilt, 0deg) * -1));
   }
   75% {
-    transform: translate(0, calc(var(--orbit-ry) * -1));
+    transform: rotateZ(var(--orbit-tilt, 0deg)) translate(0, calc(var(--orbit-ry) * -1)) rotateZ(calc(var(--orbit-tilt, 0deg) * -1));
   }
   100% {
-    transform: translate(var(--orbit-rx), 0);
+    transform: rotateZ(var(--orbit-tilt, 0deg)) translate(var(--orbit-rx), 0) rotateZ(calc(var(--orbit-tilt, 0deg) * -1));
   }
 }
 
-.electron-orbit {
-  animation: electronOrbit var(--orbit-duration, 12s) linear infinite;
+.celestial-orbit {
+  animation: celestialOrbit linear infinite;
   will-change: transform;
-}
-
-/* Nucleus pulse */
-@keyframes nucleusPulse {
-  0%, 100% {
-    filter: drop-shadow(0 0 20px rgba(249, 115, 22, 0.3));
-  }
-  50% {
-    filter: drop-shadow(0 0 40px rgba(249, 115, 22, 0.5));
-  }
-}
-
-.nucleus-pulse {
-  animation: nucleusPulse 3s ease-in-out infinite;
-}
-
-/* Electron body hover effect */
-.electron-body {
-  transition: r 0.3s ease, filter 0.3s ease;
-}
-
-.electron-body:hover {
-  filter: drop-shadow(0 0 12px currentColor);
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 /* Custom scrollbar — dark theme */
@@ -178,12 +158,30 @@
   z-index: 1;
 }
 
+/* Focus-visible for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid rgba(45, 212, 191, 0.5);
+  outline-offset: 2px;
+}
+
+/* Text gradient utility */
+.text-gradient-cosmic {
+  background: linear-gradient(135deg, #5eead4, #a78bfa, #fb923c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  .electron-orbit {
+  html {
+    scroll-behavior: auto;
+  }
+  .celestial-orbit {
     animation: none !important;
   }
-  .nucleus-pulse {
-    animation: none !important;
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
   }
 }
