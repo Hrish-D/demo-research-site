@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from './ThemeProvider';
@@ -19,6 +20,8 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -26,12 +29,14 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const scrolledClass = isHomePage
+    ? 'bg-black/60 backdrop-blur-xl border-b border-white/5 shadow-lg shadow-black/10'
+    : 'glass shadow-sm';
+
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled
-          ? 'glass shadow-sm'
-          : 'bg-transparent'
+        isScrolled ? scrolledClass : 'bg-transparent'
       }`}
     >
       <div className="container-width">
@@ -40,7 +45,7 @@ const Navbar = () => {
             <div className="w-9 h-9 rounded-lg bg-accent-600 flex items-center justify-center text-white font-serif font-bold text-base group-hover:scale-110 transition-transform duration-300">
               A
             </div>
-            <span className="hidden sm:inline font-serif text-lg font-semibold text-[var(--foreground)] group-hover:text-accent-600 dark:group-hover:text-accent-400 transition-colors">
+            <span className={`hidden sm:inline font-serif text-lg font-semibold transition-colors ${isHomePage ? 'text-white/90 group-hover:text-accent-400' : 'text-[var(--foreground)] group-hover:text-accent-600 dark:group-hover:text-accent-400'}`}>
               {LAB_ACRONYM}
             </span>
           </Link>
@@ -50,17 +55,17 @@ const Navbar = () => {
               <Link
                 key={item.href}
                 href={item.href}
-                className="px-4 py-2 text-sm font-medium text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors duration-300 rounded-lg hover:bg-[var(--muted)]"
+                className={`px-4 py-2 text-sm font-medium transition-colors duration-300 rounded-lg ${isHomePage ? 'text-white/60 hover:text-white hover:bg-white/10' : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--muted)]'}`}
               >
                 {item.label}
               </Link>
             ))}
 
-            <div className="ml-2 w-px h-6 bg-[var(--card-border)]" />
+            <div className={`ml-2 w-px h-6 ${isHomePage ? 'bg-white/10' : 'bg-[var(--card-border)]'}`} />
 
             <button
               onClick={toggleTheme}
-              className="ml-2 p-2.5 rounded-lg text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--muted)] transition-all duration-300"
+              className={`ml-2 p-2.5 rounded-lg transition-all duration-300 ${isHomePage ? 'text-white/60 hover:text-white hover:bg-white/10' : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--muted)]'}`}
               aria-label="Toggle theme"
             >
               {theme === 'light' ? (

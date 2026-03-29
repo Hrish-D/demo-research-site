@@ -26,7 +26,7 @@ const PublicationCard = ({ publication, index = 0 }: PublicationCardProps) => {
             rel="noopener noreferrer"
             className="text-xs text-accent-600 dark:text-accent-400 hover:underline font-medium transition-colors"
           >
-            DOI &nearr;
+            DOI &#8599;
           </a>
         )}
       </div>
@@ -65,7 +65,7 @@ const PublicationCard = ({ publication, index = 0 }: PublicationCardProps) => {
             rel="noopener noreferrer"
             className="text-sm font-medium text-accent-600 dark:text-accent-400 hover:underline transition-colors"
           >
-            Read Paper &nearr;
+            Read Paper &#8599;
           </a>
         )}
       </div>
