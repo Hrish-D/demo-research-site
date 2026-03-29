@@ -9,118 +9,67 @@ interface TeamCardProps {
 }
 
 const TeamCard = ({ member, index = 0 }: TeamCardProps) => {
-  const containerVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        delay: index * 0.1,
-        ease: 'easeOut',
-      },
-    },
+  const roleColors: Record<string, string> = {
+    pi: 'bg-purple-500/10 text-purple-700 dark:text-purple-400',
+    phd: 'bg-blue-500/10 text-blue-700 dark:text-blue-400',
+    undergrad: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
+    collaborator: 'bg-amber-500/10 text-amber-700 dark:text-amber-400',
   };
 
-  const getRoleColor = (role: string) => {
-    switch (role) {
-      case 'pi':
-        return 'bg-purple-50 text-purple-700';
-      case 'phd':
-        return 'bg-blue-50 text-blue-700';
-      case 'undergrad':
-        return 'bg-green-50 text-green-700';
-      case 'collaborator':
-        return 'bg-amber-50 text-amber-700';
-      default:
-        return 'bg-slate-50 text-slate-700';
-    }
+  const roleLabels: Record<string, string> = {
+    pi: 'Principal Investigator',
+    phd: 'PhD Student',
+    undergrad: 'Undergraduate',
+    collaborator: 'Collaborator',
   };
 
-  const getRoleLabel = (role: string) => {
-    switch (role) {
-      case 'pi':
-        return 'Principal Investigator';
-      case 'phd':
-        return 'PhD Student';
-      case 'undergrad':
-        return 'Undergraduate';
-      case 'collaborator':
-        return 'Collaborator';
-      default:
-        return role;
-    }
-  };
+  const initials = member.name.split(' ').map(n => n[0]).join('');
 
   return (
     <motion.div
-      className="card-base overflow-hidden flex flex-col"
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-100px' }}
-      whileHover={{ y: -8 }}
-      transition={{ duration: 0.3 }}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      className="card card-hover group overflow-hidden"
     >
-      {/* Image Container */}
-      <div className="relative w-full h-56 overflow-hidden bg-gradient-to-br from-blue-100 to-slate-100">
-        {member.image && (
-          <img
-            src={member.image}
-            alt={member.name}
-            className="w-full h-full object-cover"
-          />
-        )}
-        {!member.image && (
-          <div className="w-full h-full flex items-center justify-center">
-            <svg
-              className="w-16 h-16 text-slate-300"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-            </svg>
+      {/* Avatar area */}
+      <div className="relative w-full h-52 overflow-hidden bg-gradient-to-br from-accent-500/10 via-accent-600/5 to-transparent">
+        <div className="w-full h-full flex items-center justify-center">
+          <div className="w-20 h-20 rounded-full bg-accent-500/15 dark:bg-accent-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
+            <span className="text-2xl font-serif font-semibold text-accent-700 dark:text-accent-400">
+              {initials}
+            </span>
           </div>
-        )}
+        </div>
       </div>
 
       {/* Content */}
-      <div className="p-6 flex flex-col flex-grow">
-        {/* Role Badge */}
-        <span
-          className={`inline-flex items-center w-fit px-3 py-1 rounded-full text-xs font-semibold mb-3 ${getRoleColor(
-            member.role,
-          )}`}
-        >
-          {getRoleLabel(member.role)}
+      <div className="p-6">
+        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium mb-3 ${roleColors[member.role]}`}>
+          {roleLabels[member.role]}
         </span>
 
-        {/* Name */}
-        <h3 className="text-xl font-serif font-semibold text-slate-900 mb-1">
+        <h3 className="text-lg font-serif font-semibold text-[var(--foreground)] mb-1 group-hover:text-accent-600 dark:group-hover:text-accent-400 transition-colors">
           {member.name}
         </h3>
 
-        {/* Title */}
-        <p className="text-sm text-slate-600 font-medium mb-3">{member.title}</p>
+        <p className="text-sm text-[var(--muted-foreground)] font-medium mb-3">
+          {member.title}
+        </p>
 
-        {/* Specialization or Bio */}
-        <p className="text-sm text-slate-600 mb-4 flex-grow line-clamp-3">
+        <p className="text-sm text-[var(--muted-foreground)] leading-relaxed line-clamp-2 mb-4">
           {member.specialization || member.bio}
         </p>
 
-        {/* Contact Links */}
-        <div className="flex items-center gap-3 pt-4 border-t border-slate-100">
+        <div className="flex items-center gap-2 pt-4 border-t border-[var(--card-border)]">
           {member.email && (
             <a
               href={`mailto:${member.email}`}
-              className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-700 hover:bg-blue-100 hover:text-blue-700 transition-colors"
+              className="w-8 h-8 rounded-lg bg-[var(--muted)] flex items-center justify-center text-[var(--muted-foreground)] hover:text-accent-600 dark:hover:text-accent-400 hover:bg-accent-500/10 transition-all duration-300"
               title="Email"
             >
-              <svg
-                className="w-4 h-4"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
               </svg>
             </a>
@@ -130,20 +79,14 @@ const TeamCard = ({ member, index = 0 }: TeamCardProps) => {
               href={member.website}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-700 hover:bg-blue-100 hover:text-blue-700 transition-colors"
+              className="w-8 h-8 rounded-lg bg-[var(--muted)] flex items-center justify-center text-[var(--muted-foreground)] hover:text-accent-600 dark:hover:text-accent-400 hover:bg-accent-500/10 transition-all duration-300"
               title="Website"
             >
-              <svg
-                className="w-4 h-4"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5h3V9h4v3h3l-5 5z" />
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
             </a>
           )}
-          <div className="flex-grow" />
-          <span className="text-xs text-slate-500">{member.bio.slice(0, 20)}...</span>
         </div>
       </div>
     </motion.div>

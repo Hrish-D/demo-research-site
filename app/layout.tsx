@@ -3,6 +3,7 @@ import { EB_Garamond, Inter } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { ThemeProvider } from '@/components/ThemeProvider';
 import { LAB_NAME, LAB_DESCRIPTION, LAB_INSTITUTION } from '@/lib/data';
 
 const garamond = EB_Garamond({
@@ -33,18 +34,7 @@ export const metadata: Metadata = {
     title: LAB_NAME,
     description: LAB_DESCRIPTION,
     type: 'website',
-    url: 'https://amslab.edu',
-    images: [
-      {
-        url: 'https://amslab.edu/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: LAB_NAME,
-      },
-    ],
   },
-  viewport: 'width=device-width, initial-scale=1.0',
-  themeColor: '#0f172a',
 };
 
 export default function RootLayout({
@@ -53,11 +43,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${garamond.variable} ${inter.variable}`}>
-      <body className="bg-white text-slate-900 font-sans antialiased">
-        <Navbar />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
+    <html lang="en" className={`${garamond.variable} ${inter.variable}`} suppressHydrationWarning>
+      <body className="font-sans antialiased">
+        <ThemeProvider>
+          <Navbar />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -10,45 +10,41 @@ import { RESEARCH_PROJECTS } from '@/lib/data';
 export default function ResearchPage() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  // Extract unique tags
   const allTags = useMemo(() => {
     const tags = new Set<string>();
-    RESEARCH_PROJECTS.forEach((project) => {
-      project.tags.forEach((tag) => tags.add(tag));
-    });
+    RESEARCH_PROJECTS.forEach((p) => p.tags.forEach((t) => tags.add(t)));
     return Array.from(tags).sort();
   }, []);
 
-  // Filter projects based on selected tags
   const filteredProjects = useMemo(() => {
-    if (selectedTags.length === 0) {
-      return RESEARCH_PROJECTS;
-    }
-    return RESEARCH_PROJECTS.filter((project) =>
-      selectedTags.some((tag) => project.tags.includes(tag)),
+    if (selectedTags.length === 0) return RESEARCH_PROJECTS;
+    return RESEARCH_PROJECTS.filter((p) =>
+      selectedTags.some((t) => p.tags.includes(t)),
     );
   }, [selectedTags]);
 
-  // Group by status
-  const projectsByStatus = useMemo(() => {
-    return {
-      active: filteredProjects.filter((p) => p.status === 'active'),
-      completed: filteredProjects.filter((p) => p.status === 'completed'),
-      planned: filteredProjects.filter((p) => p.status === 'planned'),
-    };
-  }, [filteredProjects]);
+  const projectsByStatus = useMemo(() => ({
+    active: filteredProjects.filter((p) => p.status === 'active'),
+    completed: filteredProjects.filter((p) => p.status === 'completed'),
+    planned: filteredProjects.filter((p) => p.status === 'planned'),
+  }), [filteredProjects]);
+
+  const statusSections = [
+    { key: 'active', label: 'Active Research', items: projectsByStatus.active },
+    { key: 'completed', label: 'Completed Research', items: projectsByStatus.completed },
+    { key: 'planned', label: 'Planned Research', items: projectsByStatus.planned },
+  ];
 
   return (
     <>
       <HeroSection
         title="Research Projects"
         subtitle="Explore Our Work"
-        description="Cutting-edge research in materials science, nanotechnology, and biomimetic systems"
+        description="Cutting-edge research across materials science, nanotechnology, machine learning, and biomimetic systems."
       />
 
-      <section className="py-16 md:py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Filters */}
+      <section className="section-padding">
+        <div className="container-width">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -61,99 +57,47 @@ export default function ResearchPage() {
               onTagChange={setSelectedTags}
               label="Filter by research area"
             />
-            {!(selectedTags.length === 0) && (
-              <p className="text-sm text-slate-600 mt-4">
-                Showing {filteredProjects.length} of {RESEARCH_PROJECTS.length}{' '}
-                projects
+            {selectedTags.length > 0 && (
+              <p className="text-sm text-[var(--muted-foreground)] mt-4">
+                Showing {filteredProjects.length} of {RESEARCH_PROJECTS.length} projects
               </p>
             )}
           </motion.div>
 
-          {/* Active Projects */}
-          {projectsByStatus.active.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.6 }}
-              className="mb-16"
-            >
-              <h2 className="text-2xl md:text-3xl font-serif font-semibold text-slate-900 mb-8">
-                Active Research
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {projectsByStatus.active.map((project, index) => (
-                  <ProjectCard
-                    key={project.id}
-                    project={project}
-                    index={index}
-                  />
-                ))}
-              </div>
-            </motion.div>
+          {statusSections.map(({ key, label, items }) =>
+            items.length > 0 ? (
+              <motion.div
+                key={key}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.6 }}
+                className="mb-20"
+              >
+                <div className="flex items-center gap-4 mb-10">
+                  <h2 className="text-2xl md:text-3xl font-serif font-semibold text-[var(--foreground)]">
+                    {label}
+                  </h2>
+                  <div className="h-px flex-grow bg-[var(--card-border)]" />
+                  <span className="text-sm text-[var(--muted-foreground)]">{items.length}</span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {items.map((project, index) => (
+                    <ProjectCard key={project.id} project={project} index={index} />
+                  ))}
+                </div>
+              </motion.div>
+            ) : null
           )}
 
-          {/* Completed Projects */}
-          {projectsByStatus.completed.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="mb-16"
-            >
-              <h2 className="text-2xl md:text-3xl font-serif font-semibold text-slate-900 mb-8">
-                Completed Research
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {projectsByStatus.completed.map((project, index) => (
-                  <ProjectCard
-                    key={project.id}
-                    project={project}
-                    index={index}
-                  />
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {/* Planned Projects */}
-          {projectsByStatus.planned.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="mb-16"
-            >
-              <h2 className="text-2xl md:text-3xl font-serif font-semibold text-slate-900 mb-8">
-                Planned Research
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {projectsByStatus.planned.map((project, index) => (
-                  <ProjectCard
-                    key={project.id}
-                    project={project}
-                    index={index}
-                  />
-                ))}
-              </div>
-            </motion.div>
-          )}
-
-          {/* No Results */}
           {filteredProjects.length === 0 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="text-center py-12"
-            >
-              <p className="text-slate-600 text-lg">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
+              <p className="text-[var(--muted-foreground)] text-lg mb-4">
                 No projects found matching the selected filters.
               </p>
               <button
                 onClick={() => setSelectedTags([])}
-                className="mt-4 text-blue-600 hover:text-blue-700 font-medium"
+                className="text-accent-600 dark:text-accent-400 hover:underline font-medium"
               >
                 Clear filters
               </button>
