@@ -33,6 +33,7 @@ const config: Config = {
         'slide-in': 'slideIn 0.5s ease-out forwards',
         'float': 'float 6s ease-in-out infinite',
         'glow': 'glow 4s ease-in-out infinite alternate',
+        'nucleus-pulse': 'nucleusPulse 3s ease-in-out infinite',
       },
       keyframes: {
         fadeUp: {
@@ -55,10 +56,13 @@ const config: Config = {
           '0%': { opacity: '0.4' },
           '100%': { opacity: '0.8' },
         },
+        nucleusPulse: {
+          '0%, 100%': { filter: 'drop-shadow(0 0 20px rgba(249, 115, 22, 0.3))' },
+          '50%': { filter: 'drop-shadow(0 0 40px rgba(249, 115, 22, 0.5))' },
+        },
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'hero-pattern': 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f766e 100%)',
       },
     },
   },

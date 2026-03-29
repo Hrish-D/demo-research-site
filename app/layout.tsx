@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import { EB_Garamond, Inter } from 'next/font/google';
 import './globals.css';
-import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { LAB_NAME, LAB_DESCRIPTION, LAB_INSTITUTION } from '@/lib/data';
 
@@ -43,12 +41,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${garamond.variable} ${inter.variable}`} suppressHydrationWarning>
-      <body className="font-sans antialiased">
+    <html lang="en" className={`${garamond.variable} ${inter.variable} dark`} suppressHydrationWarning>
+      <body className="font-sans antialiased bg-black text-white">
         <ThemeProvider>
-          <Navbar />
-          <main className="min-h-screen">{children}</main>
-          <Footer />
+          {children}
         </ThemeProvider>
       </body>
     </html>
