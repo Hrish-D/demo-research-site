@@ -8,102 +8,64 @@ interface PublicationCardProps {
   index?: number;
 }
 
-const PublicationCard = ({
-  publication,
-  index = 0,
-}: PublicationCardProps) => {
-  const containerVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.5,
-        delay: index * 0.05,
-        ease: 'easeOut',
-      },
-    },
-  };
-
+const PublicationCard = ({ publication, index = 0 }: PublicationCardProps) => {
   return (
     <motion.article
-      className="card-base p-6 hover:shadow-lg transition-all duration-300"
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-100px' }}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.5, delay: index * 0.05 }}
+      className="card p-6 card-hover group"
     >
-      {/* Year Badge */}
-      <div className="flex items-start justify-between mb-3">
-        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-blue-50 text-blue-700">
-          {publication.year}
-        </span>
+      <div className="flex items-start justify-between mb-4">
+        <span className="tag font-semibold">{publication.year}</span>
         {publication.doi && (
           <a
             href={`https://doi.org/${publication.doi}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-blue-600 hover:text-blue-700 transition-colors"
+            className="text-xs text-accent-600 dark:text-accent-400 hover:underline font-medium transition-colors"
           >
-            DOI ↗
+            DOI &nearr;
           </a>
         )}
       </div>
 
-      {/* Title */}
-      <h3 className="text-lg font-serif font-semibold text-slate-900 mb-3 leading-snug">
+      <h3 className="text-base font-serif font-semibold text-[var(--foreground)] mb-3 leading-snug group-hover:text-accent-600 dark:group-hover:text-accent-400 transition-colors duration-300">
         {publication.title}
       </h3>
 
-      {/* Authors */}
-      <p className="text-sm text-slate-600 mb-3">
-        <span className="font-medium">{publication.authors.join(', ')}</span>
+      <p className="text-sm text-[var(--muted-foreground)] mb-2">
+        {publication.authors.join(', ')}
       </p>
 
-      {/* Journal */}
-      <p className="text-sm text-slate-500 italic mb-4">
+      <p className="text-sm text-accent-600/70 dark:text-accent-400/70 italic mb-4">
         {publication.journal}
       </p>
 
-      {/* Abstract */}
       {publication.abstract && (
-        <p className="text-sm text-slate-600 line-clamp-3 mb-4">
+        <p className="text-sm text-[var(--muted-foreground)] line-clamp-2 mb-4 leading-relaxed">
           {publication.abstract}
         </p>
       )}
 
-      {/* Tags */}
-      <div className="flex flex-wrap gap-2 mb-4">
+      <div className="flex flex-wrap gap-1.5 mb-4">
         {publication.tags.map((tag) => (
-          <span
-            key={tag}
-            className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-slate-100 text-slate-700"
-          >
+          <span key={tag} className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-medium bg-[var(--muted)] text-[var(--muted-foreground)]">
             {tag}
           </span>
         ))}
       </div>
 
-      {/* Action Links */}
-      <div className="flex items-center gap-3">
-        {publication.url && (
-          <a
-            href={publication.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
-          >
-            Read Paper ↗
-          </a>
-        )}
+      <div className="flex items-center gap-4 pt-4 border-t border-[var(--card-border)]">
         {publication.doi && (
           <a
             href={`https://doi.org/${publication.doi}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-sm font-medium text-slate-600 hover:text-slate-700 transition-colors"
+            className="text-sm font-medium text-accent-600 dark:text-accent-400 hover:underline transition-colors"
           >
-            DOI ↗
+            Read Paper &nearr;
           </a>
         )}
       </div>

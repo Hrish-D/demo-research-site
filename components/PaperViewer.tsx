@@ -11,103 +11,70 @@ const PaperViewer = ({ paper }: PaperViewerProps) => {
   const [isEmbedded, setIsEmbedded] = useState(true);
 
   return (
-    <div className="card-base p-8">
+    <div className="space-y-6">
       {/* Paper Info */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-serif font-semibold text-slate-900 mb-4">
+      <div>
+        <h1 className="text-2xl font-serif font-semibold text-[var(--foreground)] mb-4">
           {paper.title}
         </h1>
 
-        <p className="text-slate-600 mb-4">
-          <span className="font-medium">{paper.authors.join(', ')}</span>
+        <p className="text-sm text-[var(--muted-foreground)] mb-4">
+          <span className="font-medium text-[var(--foreground)]">{paper.authors.join(', ')}</span>
         </p>
 
-        <div className="flex flex-wrap gap-4 text-sm text-slate-600 mb-6">
-          <div>
-            <span className="font-medium">Year:</span> {paper.year}
-          </div>
-          <div>
-            <span className="font-medium">Uploaded:</span>{' '}
-            {new Date(paper.uploadedDate).toLocaleDateString()}
-          </div>
+        <div className="flex flex-wrap gap-4 text-sm text-[var(--muted-foreground)] mb-6">
+          <span>Year: {paper.year}</span>
+          <span>Uploaded: {new Date(paper.uploadedDate).toLocaleDateString()}</span>
         </div>
 
         {paper.abstract && (
-          <div className="mb-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
-            <h3 className="font-medium text-slate-900 mb-2">Abstract</h3>
-            <p className="text-sm text-slate-700 leading-relaxed">
+          <div className="mb-6 p-5 bg-[var(--muted)] rounded-xl border border-[var(--card-border)]">
+            <h3 className="font-medium text-[var(--foreground)] mb-2 text-sm">Abstract</h3>
+            <p className="text-sm text-[var(--muted-foreground)] leading-relaxed">
               {paper.abstract}
             </p>
           </div>
         )}
 
-        {/* Tags */}
         {paper.tags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-6">
             {paper.tags.map((tag) => (
-              <span
-                key={tag}
-                className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700"
-              >
-                {tag}
-              </span>
+              <span key={tag} className="tag">{tag}</span>
             ))}
           </div>
         )}
 
-        {/* Action Buttons */}
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-3">
           <a
             href={paper.pdfUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            className="btn-primary"
           >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-              />
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
             Download PDF
           </a>
-
-          <button
-            onClick={() => setIsEmbedded(!isEmbedded)}
-            className="inline-flex items-center gap-2 px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors font-medium"
-          >
-            {isEmbedded ? 'View External' : 'View Embedded'}
+          <button onClick={() => setIsEmbedded(!isEmbedded)} className="btn-secondary">
+            {isEmbedded ? 'Hide Preview' : 'Show Preview'}
           </button>
         </div>
       </div>
 
       {/* PDF Viewer */}
       {isEmbedded && (
-        <div className="mt-8 border border-slate-200 rounded-lg overflow-hidden bg-slate-50">
+        <div className="border border-[var(--card-border)] rounded-xl overflow-hidden bg-[var(--muted)]">
           <iframe
             src={`${paper.pdfUrl}#toolbar=1&navpanes=0&scrollbar=1`}
-            className="w-full h-96 md:h-screen"
+            className="w-full h-96 md:h-[70vh]"
             title={paper.title}
           />
-          <div className="p-4 bg-slate-50 border-t border-slate-200 text-center text-sm text-slate-600">
-            <p>
-              PDF viewer embedded. If the PDF doesn&apos;t load,{' '}
-              <a
-                href={paper.pdfUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-700 font-medium"
-              >
-                download it directly
-              </a>
-            </p>
+          <div className="p-4 border-t border-[var(--card-border)] text-center text-sm text-[var(--muted-foreground)]">
+            If the PDF doesn&apos;t load,{' '}
+            <a href={paper.pdfUrl} target="_blank" rel="noopener noreferrer" className="text-accent-600 dark:text-accent-400 hover:underline font-medium">
+              download it directly
+            </a>
           </div>
         </div>
       )}
