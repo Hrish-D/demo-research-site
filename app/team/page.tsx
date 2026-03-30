@@ -64,7 +64,7 @@ export default function TeamPage() {
             priority
           />
         </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/55 to-black" />
         <div className="relative z-10 text-center px-6">
           <motion.p
             className="text-teal-400/70 text-xs md:text-sm tracking-[0.4em] uppercase font-sans mb-4"
@@ -83,7 +83,7 @@ export default function TeamPage() {
             Our Team
           </motion.h1>
           <motion.p
-            className="mt-4 text-white/50 max-w-xl mx-auto text-lg"
+            className="mt-4 text-white/70 max-w-xl mx-auto text-lg"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.8 }}

@@ -31,14 +31,14 @@ export function CosmicSection({
   const y = useTransform(scrollYProgress, [0, 1], ['-15%', '15%']);
 
   const overlayStyles: Record<string, string> = {
-    dark: 'bg-black/50',
-    darker: 'bg-black/70',
+    dark: 'bg-black/60',
+    darker: 'bg-black/75',
     'gradient-left':
-      'bg-gradient-to-r from-black/90 via-black/60 to-transparent',
+      'bg-gradient-to-r from-black/90 via-black/70 to-black/30',
     'gradient-right':
-      'bg-gradient-to-l from-black/90 via-black/60 to-transparent',
+      'bg-gradient-to-l from-black/90 via-black/70 to-black/30',
     'center-focus':
-      'bg-[radial-gradient(ellipse_at_center,transparent_10%,rgba(0,0,0,0.6)_50%,rgba(0,0,0,0.9)_100%)]',
+      'bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.3)_10%,rgba(0,0,0,0.7)_50%,rgba(0,0,0,0.92)_100%)]',
   };
 
   return (

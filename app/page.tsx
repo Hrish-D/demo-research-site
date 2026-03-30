@@ -121,7 +121,7 @@ export default function HomePage() {
         </motion.div>
 
         {/* Dark overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/50 to-black" />
 
         {/* Bottom fade-out edge */}
         <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black to-transparent z-[2]" />
@@ -160,7 +160,7 @@ export default function HomePage() {
           </motion.h1>
 
           <motion.p
-            className="mt-8 text-white/40 text-base md:text-lg max-w-xl leading-relaxed"
+            className="mt-8 text-white/60 text-base md:text-lg max-w-xl leading-relaxed"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.9, duration: 1 }}
@@ -222,7 +222,7 @@ export default function HomePage() {
             </Reveal>
 
             <Reveal delay={0.2}>
-              <p className="text-white/50 text-lg md:text-xl leading-relaxed mb-12 max-w-lg">
+              <p className="text-white/70 text-lg md:text-xl leading-relaxed mb-12 max-w-lg">
                 We believe the next generation of materials will be inspired by nature,
                 guided by computation, and designed for sustainability.
               </p>
@@ -388,7 +388,7 @@ export default function HomePage() {
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif text-white mb-6">
               {TEAM_MEMBERS.length} Researchers
             </h2>
-            <p className="text-white/30 text-lg max-w-lg mx-auto mb-16">
+            <p className="text-white/50 text-lg max-w-lg mx-auto mb-16">
               Talented scientists working together to advance the frontiers of materials science
             </p>
           </Reveal>
