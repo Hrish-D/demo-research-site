@@ -68,7 +68,7 @@ export default function ResearchPage() {
       <section ref={heroRef} className="relative h-[60vh] min-h-[400px] overflow-hidden flex items-center justify-center">
         <motion.div className="absolute inset-0" style={{ y: heroImageY }}>
           <Image
-            src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=85"
+            src="/images/research.png"
             alt=""
             fill
             className="object-cover"

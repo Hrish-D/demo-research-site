@@ -66,6 +66,11 @@ export function CosmicSection({
       {/* Overlay */}
       <div className={`absolute inset-0 ${overlayStyles[overlay]}`} />
 
+      {/* Top fade-in edge */}
+      <div className="absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-black to-transparent z-[2]" />
+      {/* Bottom fade-out edge */}
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black to-transparent z-[2]" />
+
       {/* Content */}
       <div className="relative z-10 w-full">{children}</div>
     </section>
@@ -126,11 +131,9 @@ export function Reveal({
 export function SectionDivider() {
   return (
     <div
-      className="relative h-[100px] w-full -my-px"
+      className="relative h-0 w-full"
       aria-hidden="true"
-    >
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/80 to-black" />
-    </div>
+    />
   );
 }
 

@@ -110,7 +110,7 @@ export default function HomePage() {
         >
           <div className="relative w-full h-full">
             <Image
-              src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1920&q=85"
+              src="/images/hero.png"
               alt=""
               fill
               className="object-cover"
@@ -122,6 +122,9 @@ export default function HomePage() {
 
         {/* Dark overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black" />
+
+        {/* Bottom fade-out edge */}
+        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black to-transparent z-[2]" />
 
         {/* Hero content */}
         <motion.div
@@ -199,7 +202,7 @@ export default function HomePage() {
           ═══════════════════════════════════════════════════════ */}
       <CosmicSection
         id="mission"
-        backgroundSrc="https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=1920&q=85"
+        backgroundSrc="/images/mission.png"
         overlay="gradient-left"
       >
         <div className="max-w-7xl mx-auto px-6 md:px-10 py-32">
@@ -244,7 +247,7 @@ export default function HomePage() {
           ═══════════════════════════════════════════════════════ */}
       <CosmicSection
         id="research"
-        backgroundSrc="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1920&q=85"
+        backgroundSrc="/images/research.png"
         overlay="darker"
       >
         <div className="max-w-7xl mx-auto px-6 md:px-10 py-32">
@@ -311,7 +314,7 @@ export default function HomePage() {
           ═══════════════════════════════════════════════════════ */}
       <CosmicSection
         id="publications"
-        backgroundSrc="https://images.unsplash.com/photo-1507499739999-097706ad8914?w=1920&q=85"
+        backgroundSrc="/images/publications.png"
         overlay="gradient-right"
       >
         <div className="max-w-7xl mx-auto px-6 md:px-10 py-32">
@@ -374,7 +377,7 @@ export default function HomePage() {
           ═══════════════════════════════════════════════════════ */}
       <CosmicSection
         id="team"
-        backgroundSrc="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=1920&q=85"
+        backgroundSrc="/images/team.png"
         overlay="center-focus"
       >
         <div className="max-w-7xl mx-auto px-6 md:px-10 py-32 text-center">
@@ -475,7 +478,7 @@ export default function HomePage() {
           SECTION 6: CTA — Dramatic nebula closeup
           ═══════════════════════════════════════════════════════ */}
       <CosmicSection
-        backgroundSrc="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1920&q=85"
+        backgroundSrc="/images/cta.png"
         overlay="center-focus"
       >
         <div className="max-w-4xl mx-auto px-6 md:px-10 py-32 text-center">

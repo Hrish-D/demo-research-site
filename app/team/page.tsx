@@ -56,7 +56,7 @@ export default function TeamPage() {
       <section ref={heroRef} className="relative h-[60vh] min-h-[400px] overflow-hidden flex items-center justify-center">
         <motion.div className="absolute inset-0" style={{ y: heroImageY }}>
           <Image
-            src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=1920&q=85"
+            src="/images/team.png"
             alt=""
             fill
             className="object-cover"

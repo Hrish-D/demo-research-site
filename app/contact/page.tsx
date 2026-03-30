@@ -64,7 +64,7 @@ export default function ContactPage() {
       <section ref={heroRef} className="relative h-[60vh] min-h-[400px] overflow-hidden flex items-center justify-center">
         <motion.div className="absolute inset-0" style={{ y: heroImageY }}>
           <Image
-            src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?w=1920&q=85"
+            src="/images/contact.png"
             alt=""
             fill
             className="object-cover"
